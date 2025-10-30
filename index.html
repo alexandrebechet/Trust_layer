@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vérification d'annonces de location</title>
+  <style>
+    :root { --bg:#0b0f1a; --fg:#ffffff; --muted:#b6c2d9; --accent:#39c5ff; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--fg); background:var(--bg); display:flex; min-height:100vh;
+      align-items:center; justify-content:center; padding:24px;
+    }
+    .wrap { max-width:700px; width:100%; text-align:center; }
+    h1 { font-size: clamp(28px, 6vw, 44px); margin:0 0 10px; }
+    p { color:var(--muted); margin:0 0 20px; font-size: clamp(16px, 2.6vw, 18px); }
+    .card {
+      border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:18px;
+      background: rgba(255,255,255,.03);
+    }
+    .cta { margin-top:16px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+    button {
+      padding:12px 16px; border-radius:10px; border:none; font-weight:700; cursor:pointer;
+      background: var(--accent); color:#062233;
+    }
+    .count { display:none; } /* compteur caché */
+    .thanks {
+      display:none;
+      color:var(--accent);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:10px;
+      padding:12px 16px;
+      max-width:420px;
+    }
+    footer { margin-top:20px; color:var(--muted); font-size:14px; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <h1>Vérifier une annonce de location</h1>
+    <p>Ce site permet de vérifier si une annonce de location immobilière est correcte<br> ou s’il s’agit d’une arnaque.</p>
+
+    <div class="card">
+      <strong>Intéressé(e) par le service&nbsp;?</strong>
+      <div class="cta">
+        <button id="btn">Je suis intéressé(e)</button>
+        <span class="count">Compteur : <strong id="count">0</strong></span>
+        <div id="thanks" class="thanks">
+          Merci pour votre intérêt 💙<br>
+          L’application est actuellement en cours de développement.<br>
+          Revenez bientôt pour tester la version bêta !
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>© <span id="year"></span> Vérification d’annonces</div>
+    </footer>
+  </main>
+
+  <script>
+    const KEY = "landing_interest_count_v1";
+    const $count = document.getElementById("count");
+    const $btn = document.getElementById("btn");
+    const $year = document.getElementById("year");
+    const $thanks = document.getElementById("thanks");
+
+    const getLocal = () => Number(localStorage.getItem(KEY) || 0);
+    const setLocal = (n) => localStorage.setItem(KEY, String(n));
+    function render(){ $count.textContent = getLocal().toLocaleString("fr-FR"); }
+    $year.textContent = new Date().getFullYear();
+    render();
+
+    $btn.addEventListener("click", () => {
+      setLocal(getLocal() + 1);
+      render();
+      $btn.disabled = true;
+      $thanks.style.display = "block";
+    });
+
+    // Pour consulter le compteur dans la console :
+    // localStorage.getItem("landing_interest_count_v1")
+  </script>
+</body>
+</html>
